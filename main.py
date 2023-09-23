@@ -31,12 +31,14 @@ rodada=0
 
 while True:
 
+    jogou=False
+
+
     if rodada%2==0:
         coluna = int(input("diga a coluna que deseja colocar sua marcação"))
         linha = int(input("diga a linha que deseja colocar sua marcação"))
         mapa[coluna][linha]="O"
     else:
-
         print("jogada da velha")
         prioridade = []
         # quinas e centro
@@ -58,39 +60,52 @@ while True:
 
         else:
 
-             # defesa
-            if mapa[0][0]=="O" and mapa[0][2]=="O":
-                mapa[0][1]="X"
-
-
-            elif mapa[1][0]=="O" and mapa[1][2]=="O":
-                mapa[1][1]="X"
-
-
-            elif mapa[2][0]=="O" and mapa[2][2]=="O":
-                 mapa[2][1]="X"
-
-
-            elif mapa[0][2]=="O" and mapa[2][0]=="O":
-                mapa[1][1]="X"
-
-
-            elif mapa[0][2]=="O" and mapa[1][1]=="O":
-                mapa[2][0]="X"
-
-
             for i in range(len(mapa)):
                 for j in range(len(mapa)):
                     if mapa[i][j] == "O" and mapa[i][(j + 1) % 3] == "O" and mapa[i][(j + 2) % 3] == ",":
                         mapa[i][(j + 2) % 3] = "X"
+                        jogou=True
+                        break
 
 
                     elif mapa[j][i] == "O" and mapa[(j + 1) % 3][i] == "O" and mapa[(j + 2) % 3][i] == ",":
                         mapa[(j + 2) % 3][i] = "X"
+                        jogou=True
+                        break
+                        
 
 
                     elif mapa[i][i] == "O" and mapa[(i + 1) % 3][(i + 1) % 3] == "O" and mapa[(i + 2) % 3][(i + 2) % 3] == ",":
                         mapa[(i + 2) % 3][(i + 2) % 3] = "X"
+                        jogou=True
+                        break
+            if jogou:
+                continue
+
+             # defesa
+            if mapa[0][0]=="O" and mapa[0][2]=="O":
+                mapa[0][1]="X"
+                continue
+
+
+            elif mapa[1][0]=="O" and mapa[1][2]=="O":
+                mapa[1][1]="X"
+                continue
+
+
+            elif mapa[2][0]=="O" and mapa[2][2]=="O":
+                mapa[2][1]="X"
+                continue
+
+
+            elif mapa[0][2]=="O" and mapa[2][0]=="O":
+                mapa[1][1]="X"
+                continue
+
+
+            elif mapa[0][2]=="O" and mapa[1][1]=="O":
+                mapa[2][0]="X"
+                continue
 
 
             else:
@@ -99,12 +114,36 @@ while True:
                     for j in range(len(mapa)):
                         if mapa[i][j] == "X" and mapa[i][(j + 1) % 3] == "X" and mapa[i][(j + 2) % 3] == ",":
                             mapa[i][(j + 2) % 3] = "X"
+                            jogou=True
+                            break
 
                         elif mapa[i][(j + 2) % 3] == "X" and mapa[i][(j + 1) % 3] == "X" and mapa[i][j] == ",":
                             mapa[i][j] = "X"
+                            jogou=True
+                            break
 
                         elif mapa[i][j] == "X" and mapa[(i + 1) % 3][j] == "X" and mapa[2][j] == ",":
                             mapa[2][j] = "X"
+                            jogou=True
+                            break
+                if jogou:
+                    continue
+
+                if mapa[0][2]=="X" and mapa[1][1]=="X" and mapa[2][0] == ",":
+                    mapa[2][0]= "X"
+                    continue
+                if mapa[0][0]=="X" and mapa[1][1]=="X" and mapa[2][2] == ",":
+                    mapa[2][2]= "X"
+                    continue                    
+                else:
+                    #jogada aleatoria
+                    for i in range(len(mapa)):
+                        for j in range(len(mapa)):
+                            if mapa[i][j]==",":
+                                prioridade.append((i,j))
+                    escolha_aleatoria=random.choice(prioridade)
+                    mapa[escolha_aleatoria[0]][escolha_aleatoria[1]]="X"
+                    
 
 
     printa_matriz(mapa)
